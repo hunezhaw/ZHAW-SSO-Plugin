@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="authSources/ldap_Edit" type="xmlform">
+
+<title type="title">
+  <en>Authentication Source Information</en>
+</title>
+
+<AUTH_SOURCE_UID type="hidden"/>
+
+<AUTH_SOURCE_NAME type="text" size="50" maxlength="50" required="1">
+  <en>Name</en>
+</AUTH_SOURCE_NAME>
+
+<AUTH_SOURCE_PROVIDER type="hidden" defaultValue="ldap"/>
+
+<LDAP_TYPE type="dropdown" required="0">
+  <en>Type
+    <option name="ldap">LDAP</option>
+    <option name="ad">Active Directory</option>
+  </en>
+</LDAP_TYPE>
+
+<AUTH_SOURCE_AUTO_REGISTER type="dropdown">
+  <en>Enabled Automatic Register
+    <option name="0">No</option>
+    <option name="1">Yes</option>
+  </en>
+</AUTH_SOURCE_AUTO_REGISTER>
+
+<AUTH_SOURCE_SERVER_NAME type="text" size="50" maxlength="50" required="1">
+  <en>Server Name</en>
+</AUTH_SOURCE_SERVER_NAME>
+
+<AUTH_SOURCE_PORT type="text" size="5" maxlength="5" required="1" defaultValue="389" validate="Int">
+  <en>Port</en>
+</AUTH_SOURCE_PORT>
+
+<AUTH_SOURCE_ENABLED_TLS type="dropdown">
+  <en>Enabled TLS<option name="0">No</option><option name="1">Yes</option></en>
+</AUTH_SOURCE_ENABLED_TLS>
+
+<AUTH_SOURCE_BASE_DN type="text" size="50" maxlength="128" required="1">
+  <en>Base DN</en>
+</AUTH_SOURCE_BASE_DN>
+
+<AUTH_ANONYMOUS type="dropdown">
+  <en>Anonymous
+    <option name="0">No</option>
+    <option name="1">Yes</option>
+  </en>
+</AUTH_ANONYMOUS>
+
+<AUTH_SOURCE_SEARCH_USER type="text" size="50" maxlength="128" required="0">
+  <en>Search User</en>
+</AUTH_SOURCE_SEARCH_USER>
+
+<AUTH_SOURCE_PASSWORD type="password" size="20" maxlength="32" required="0">
+  <en>Password</en>
+</AUTH_SOURCE_PASSWORD>
+
+<AUTH_SOURCE_IDENTIFIER_FOR_USER type="text" size="20" maxlength="20" required="1" defaultValue="uid">
+  <en>User Identifier</en>
+</AUTH_SOURCE_IDENTIFIER_FOR_USER>
+
+<AUTH_SOURCE_USERS_FILTER type="text" size="50" maxlength="200" required="0" defaultValue="">
+  <en><![CDATA[Filter to search users (Default set to (&(!(objectClass=organizationalUnit))))]]></en>
+</AUTH_SOURCE_USERS_FILTER>
+
+<btnSave type="submit">
+  <en>Save</en>
+</btnSave>
+
+<btnCancel type="button" onclick="history.go(-1);" >
+  <en>Cancel</en>
+</btnCancel>
+
+<JS type="javascript">
+<![CDATA[
+
+var dynaformOnload = function() {
+  leimnud.event.add(getField('AUTH_ANONYMOUS'), 'change', hideShowSearchUser);
+  leimnud.event.add(getField('LDAP_TYPE'), 'change', hideShowSuggest);
+  hideShowSearchUser();
+  hideShowSuggest();
+};
+
+var hideShowSearchUser = function() {
+  if (getField('AUTH_ANONYMOUS').value == '1') {
+    hideRowById('AUTH_SOURCE_SEARCH_USER');
+    hideRowById('AUTH_SOURCE_PASSWORD');
+  }
+  else {
+    showRowById('AUTH_SOURCE_SEARCH_USER');
+    showRowById('AUTH_SOURCE_PASSWORD');
+  }
+};
+
+var hideShowSuggest = function() {
+    var AUTH_SOURCE_IDENTIFIER_FOR_USER = getField('AUTH_SOURCE_IDENTIFIER_FOR_USER');
+    switch (getField('LDAP_TYPE').value) {
+      case 'ldap':
+        AUTH_SOURCE_IDENTIFIER_FOR_USER.value = 'uid';
+      break;
+      case 'ad':
+        AUTH_SOURCE_IDENTIFIER_FOR_USER.value = 'samaccountname';
+      break;
+    }
+};
+
+]]>
+</JS>
+
+</dynaForm>
