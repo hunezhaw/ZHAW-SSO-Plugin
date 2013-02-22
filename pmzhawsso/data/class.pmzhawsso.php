@@ -105,7 +105,7 @@ class pmzhawsso {
         }
 
         if ( !$bBind ) {
-            $this->log('class.pmzhawsso.php: Unable to bind to server : ' . $this->$sAuthHost . ' in port ' . $this->$sAuthPort);
+            $this->log('class.pmzhawsso.php: Unable to bind to server : ' . $aAuthSource['AUTH_SOURCE_SERVER_NAME'] . ' on port ' . $aAuthSource['AUTH_SOURCE_PORT']);
             return null;
         }
         return $oLink;
@@ -429,6 +429,34 @@ class pmzhawsso {
                 $userInstance = new Users();
                 $userInstance->create($data);
                 $this->log('Automatic Register for user "' . $user['sUsername'] . '".');
+				
+				// If defined default group, add user to this group
+				$edata = unserialize($authSource['AUTH_SOURCE_DATA']);
+				$groupName = $edata['AUTH_SOURCE_AUTO_REGISTER_DEFAULT_GRP'];
+				
+				// Find group uid based on the enterd group name
+				if (!empty($groupName)){
+					require_once 'classes/model/Content.php';
+					require_once 'classes/model/Groupwf.php';
+					$crit = new Criteria('workflow');
+					$crit->clearSelectColumns();
+					$crit->addSelectColumn( ContentPeer::CON_ID );
+					$crit->add(ContentPeer::CON_CATEGORY,  'GRP_TITLE');
+					$crit->add(ContentPeer::CON_VALUE,  $groupName);
+					$crit->add(ContentPeer::CON_LANG,  SYS_LANG );					
+					
+					$oDataset = GroupwfPeer::doSelectRS($crit);
+					$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+					$oDataset->next();
+					$aRow = $oDataset->getRow();				
+					if ($aRow) {
+						G::LoadClass("groups");					
+						$groupUID = $aRow['CON_ID'];
+						$grpInstance = new Groups();
+						$grpInstance->addUserToGroup($groupUID, $userUID);
+						$this->log('User "' . $user['sUsername'] . '" added to group "' . $groupName . '".');
+					}
+				}
             }
             return $result;
         }

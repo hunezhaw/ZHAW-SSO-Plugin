@@ -27,6 +27,10 @@
   </en>
 </AUTH_SOURCE_AUTO_REGISTER>
 
+<AUTH_SOURCE_AUTO_REGISTER_DEFAULT_GRP type="text" size="50" maxlength="50" required="0">
+  <en>Default User Group</en>
+</AUTH_SOURCE_AUTO_REGISTER_DEFAULT_GRP>
+
 <AUTH_SOURCE_SERVER_NAME type="text" size="50" maxlength="50" required="1">
   <en>Server Name</en>
 </AUTH_SOURCE_SERVER_NAME>
@@ -80,8 +84,19 @@
 var dynaformOnload = function() {
   leimnud.event.add(getField('AUTH_ANONYMOUS'), 'change', hideShowSearchUser);
   leimnud.event.add(getField('LDAP_TYPE'), 'change', hideShowSuggest);
+  leimnud.event.add(getField('AUTH_SOURCE_AUTO_REGISTER'), 'change', hideShowAutomaticRegister);
   hideShowSearchUser();
+  hideShowAutomaticRegister();
   hideShowSuggest();
+};
+
+var hideShowAutomaticRegister = function() {
+  if (getField('AUTH_SOURCE_AUTO_REGISTER').value == '0') {
+    hideRowById('AUTH_SOURCE_AUTO_REGISTER_DEFAULT_GRP');
+  }
+  else {
+    showRowById('AUTH_SOURCE_AUTO_REGISTER_DEFAULT_GRP');
+  }
 };
 
 var hideShowSearchUser = function() {
