@@ -20,8 +20,8 @@ AS of writing this document the ZHAW-SSO plugin provides the following functiona
 
 Please see the documentation under pmzhawsso\documentation\121214_PM_IIS_SSO.pdf
 
-+ Addition for PM version 3.0.15: For making the plugin work for version 3.0.15 the dynaform pmzhawssoEdit.xml needs to be copied to the folder "..\workflow\engine\xmlform\authSources". 
++ **Addition for PM version 3.0.15:** For making the plugin work for version 3.0.15 the dynaform pmzhawssoEdit.xml needs to be copied to the folder "..\workflow\engine\xmlform\authSources". 
 
-+ Important IIS configuration: In order for the plugin to work integrated authentication for the PM web needs to be enabled in IIS. Else the plugin is not able to get the user name. All other authentication options need to be disabled.
++ **Important IIS configuration:** In order for the plugin to work integrated authentication for the PM web needs to be enabled in IIS. Else the plugin is not able to get the user name. All other authentication options need to be disabled.
 
 Philipp Hungerbühler
