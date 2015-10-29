@@ -1,11 +1,11 @@
 ZHAW-SSO-Plugin
 ===============
 
-Single Sign On Plugin for ProcessMaker (Version 2.0.44)
+Single Sign On Plugin for ProcessMaker (Version 2.0.44 and 3.0.15)
 
 This is a single-sign-on plugin for the popular PorcessMaker open source, workflow management software suite. By default ProcessMaker does not provide a SSO plugin for Windows/IIS environments.The ZHAW-SSO plugin takes advantage of the Windows Integrated authentication, which can be enabled in IIS. Once enabled (see installation) each request reaching PM will be authenticated be IIS. The corresponding user name can be accessed be checking the $_SERVER[“REMOTE_USER”] server variable. The open source version by default does not provide a hook for bypassing the sysLogin screen, which is called and rendered even before the system is fully initialized. At the point when the login is shown the different plugins are still not loaded and cannot be accessed. This proved to be a challenge. The resulting solution was to implement a small hack for the base PM framework. This hack consists of three files of the base PM framework, which were slightly extended to add a SSO hook. 
 
-Attention: As a result of these small changes to the base framework the plugin depends on the used version of PM. The plugin was only tested on PM 2.0.44. For previous or future versions of PM the changed files may need to be adapted.
+Attention: As a result of these small changes to the base framework the plugin depends on the used version of PM. The plugin was only tested on PM 2.0.44 and 3.0.15. For previous or future versions of PM the changed files may need to be adapted.
 
 Functionality
 -------------
@@ -19,5 +19,9 @@ AS of writing this document the ZHAW-SSO plugin provides the following functiona
 + Web services: The PM web services were not tested with SSO (open task). For the moment it is recommended to us a PM account when accessing the web services.
 
 Please see the documentation under pmzhawsso\documentation\121214_PM_IIS_SSO.pdf
+
++ Addition for PM version 3.0.15: For making the plugin work for version 3.0.15 the dynaform pmzhawssoEdit.xml needs to be copied to the folder "..\workflow\engine\xmlform\authSources". 
+
++ Important IIS configuration: In order for the plugin to work integrated authentication for the PM web needs to be enabled in IIS. Else the plugin is not able to get the user name. All other authentication options need to be disabled.
 
 Philipp Hungerbühler
